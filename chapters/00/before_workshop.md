@@ -1,1 +1,1 @@
-### Introduction to OpenAI API
+## Introduction to OpenAI API
