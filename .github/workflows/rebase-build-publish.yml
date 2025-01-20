@@ -24,19 +24,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-      - name: Fetch branch gh-pages
-        run: |
-          # Pull branch gh-pages from origin into a local branch named A
-          git fetch origin gh-pages:gh-pages
-
-      - name: Switch to branch gh-pages
-        run: git checkout gh-pages
-
-      - name: Rebase gh-pages onto main
-        run: |
-          # Rebase local gh-pages onto origin/main
-          git rebase origin/main
-
       - name: Install dependencies
         run: |
           pip install --upgrade pip
