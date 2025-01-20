@@ -1,0 +1,53 @@
+name: Rebase branch gh-pages and build Jupyter Book
+
+on:
+  push:
+    branches:
+      - main
+
+# This allows GitHub Actions to push back to the repo
+permissions:
+  contents: write
+
+jobs:
+  rebase-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+        with:
+          # We need the full history to do a proper rebase
+          fetch-depth: 0
+
+      - name: Set up Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Fetch branch gh-pages
+        run: |
+          # Pull branch gh-pages from origin into a local branch named A
+          git fetch origin gh-pages:gh-pages
+
+      - name: Switch to branch gh-pages
+        run: git checkout gh-pages
+
+      - name: Rebase gh-pages onto main
+        run: |
+          # Rebase local gh-pages onto origin/main
+          git rebase origin/main
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install jupyter-book ghp-import
+
+      - name: Build the book
+        run: jupyter-book build .
+
+      - name: Publish to GitHub Pages
+        run: |
+          # By default, ghp-import commits to 'gh-pages' branch.
+          # If that is your desired branch for Pages, no need for -b argument.
+          # Otherwise, add `-b your-pages-branch` if needed.
+          ghp-import -n -p -f _build/html
