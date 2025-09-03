@@ -3,3 +3,5 @@ openai
 jupyter
 ipykernel
 ipython
+GromacsWrapper
+pandas
